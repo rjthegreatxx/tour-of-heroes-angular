@@ -28,4 +28,8 @@ export class HeroService {
     this.messageService.add(`HeroService: fetched hero id=${id}`);
     return hero;
   }
+
+  updateHero(hero: Hero): Observable<Hero> {
+    return this.http.post<Hero>(this.heroesUrl+ '/update', hero);
+  }
 }
