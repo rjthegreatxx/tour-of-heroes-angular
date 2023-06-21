@@ -10,12 +10,12 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class HeroService {
 
-  private heroesUrl = 'http://127.0.0.1:5000/heroes';  // URL to web api
+  private heroesUrl = 'http://127.0.0.1:5000';  // URL to web api
   constructor(private messageService: MessageService, private http: HttpClient) { }
 
   getHeroes(): Observable<Hero[]> {
     //const heroes = of(HEROES);
-    const heroes = this.http.get<Hero[]>(this.heroesUrl);
+    const heroes = this.http.get<Hero[]>(this.heroesUrl + '/heroes');
 
     this.messageService.add('HeroService: fetched heroes');
     return heroes;
@@ -24,8 +24,8 @@ export class HeroService {
   getHero(id: number): Observable<Hero> {
     // For now, assume that a hero with the specified `id` always exists.
     // Error handling will be added in the next step of the tutorial.
-    const hero = HEROES.find(h => h.id === id)!;
+    const hero = this.http.get<Hero>(this.heroesUrl+ '/detail/' + id.toString());
     this.messageService.add(`HeroService: fetched hero id=${id}`);
-    return of(hero);
+    return hero;
   }
 }

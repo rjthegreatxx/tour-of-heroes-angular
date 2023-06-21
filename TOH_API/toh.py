@@ -1,27 +1,49 @@
-from types import MethodDescriptorType
-import flask
-from flask import jsonify, request
-from flask import json
+from flask import jsonify, request, Flask
 from flask_cors import CORS
 
-app = flask.Flask(__name__)
+
+app = Flask(__name__)
 app.config["DEBUG"] = True
 CORS(app)
 
-all_heroes = [ { 'id': 11, 'name': 'Dr. Strange' },
-  { 'id': 12, 'name': 'Morbius' },
-  { 'id': 13, 'name': 'Chicken Little' },
-  { 'id': 14, 'name': 'Lightning McQueen' },
-  { 'id': 15, 'name': 'Heisenberg' },
-  { 'id': 16, 'name': 'Darth Vader' },
-  { 'id': 17, 'name': 'Arthus' },
-  { 'id': 18, 'name': 'Sylvanus' },
-  { 'id': 19, 'name': 'Lich King' },
-  { 'id': 20, 'name': 'Ugly Boy' }]
+all_heroes = [ { 'id': 11, 'name': 'Dr Nice' },
+  { 'id': 12, 'name': 'Narco' },
+  { 'id': 13, 'name': 'Bombasto' },
+  { 'id': 14, 'name': 'Celeritas' },
+  { 'id': 15, 'name': 'Magneta' },
+  { 'id': 16, 'name': 'RubberMan' },
+  { 'id': 17, 'name': 'Dynama' },
+  { 'id': 18, 'name': 'Dr IQ' },
+  { 'id': 19, 'name': 'Magma' },
+  { 'id': 20, 'name': 'Tornado' }]
 
 @app.route('/heroes', methods=['GET'])
-def heroes():
+def heroes(): 
     return jsonify(all_heroes)
+
+@app.route('/detail/<id>', methods=['GET'])
+def detail(id):
+    print(id)
+    
+    for x in all_heroes:
+      if int(x['id']) == int(id):
+        return jsonify(x)
+
+    return "Record not found", 400
+
+@app.route('/update', methods=['POST'])
+def update():
+
+  data = request.data
+  string = data.decode('UTF-8')
+  data = eval(string)
+
+  for x in all_heroes:
+    if x['id'] == data['id']:
+      x['name'] = data['name']
+      return x
+
+  return "Not found", 400
 
 
 app.run()
